@@ -5,7 +5,7 @@
 Порядок регистрации описан в [документации CloudPayments](https://cloudpayments.ru/Docs/Connect)
 
 ### Совместимость:
-* Simpla;
+* Simpla v.2.3.8 и выше;
 
 
 ### Возможности:  
@@ -33,7 +33,7 @@ http://domain.ru/payment/CloudPayments/callback.php?s_action=refund
 ### Установка модуля
 Для установки модуля необходимо поместить содержимое каталога CloudPayments из архива в каталог payment\CloudPayments на сервере.
   
-### Панель администратора SimpleCMS
+### Панель администратора Simpla
 В настройках платежей (Настройка -> Оплата) необходимо добавить способ оплаты выбрав тип CloudPayments и указать следующие настройки:
 * **Идентификатор сайта** — Public id сайта из личного кабинета CloudPayments
 * **Секретный ключ** — API Secret из личного кабинета CloudPayments

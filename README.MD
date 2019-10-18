@@ -9,7 +9,9 @@
 
 
 ### Возможности:  
-• Одностадийная схема оплаты;  
+• Одностадийная схема оплаты;
+• Двухстадийная схема оплаты;
+• Выбор дизайна виджета;
 • Поддержка онлайн-касс (ФЗ-54);  
 • Отправка чеков по email;  
 • Отправка чеков по SMS;  
@@ -25,8 +27,12 @@
 http://domain.ru/payment/CloudPayments/callback.php?s_action=check
 * **Уведомление о принятом платеже** (Pay):\
 http://domain.ru/payment/CloudPayments/callback.php?s_action=pay
-* **Уведомление о возврате платежа* (Refund):\
+* **Уведомление о подтверждении платежа** (Confirm):\
+http://domain.ru/payment/CloudPayments/callback.php?s_action=confirm
+* **Уведомление о возврате платежа** (Refund):\
 http://domain.ru/payment/CloudPayments/callback.php?s_action=refund
+* **Уведомление об отмене платежа** (Cancel):\
+http://domain.ru/payment/CloudPayments/callback.php?s_action=cancel
 
 Где domain.ru — доменное имя вашего сайта. Во всех случаях требуется выбирать вариант по умолчанию: кодировка — UTF-8, HTTP-метод — POST, формат — CloudPayments
 
@@ -48,3 +54,13 @@ http://domain.ru/payment/CloudPayments/callback.php?s_action=refund
 После указания всех данных сохранить настройки.
 
 ![Настройки CloudPayments в SimplaCMS](doc/img/simpla_settings.png)
+
+#### Changelog
+
+= 1.1 =
+* добавление двухстадийной схемы оплаты;  
+* добавление выбора дизайна виджета;  
+* правка значений ставок НДС;
+
+= 1.0 =
+* Публикация модуля.

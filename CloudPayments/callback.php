@@ -12,7 +12,7 @@ const CLOUDPAYMENTS_RESULT_ERROR_EXPIRED       = 20;
 
 //Проверяем наличие обязательных параметров
 $action = isset($_GET['s_action']) ? strtolower($_GET['s_action']) : '';
-if (!in_array($action, array('check', 'pay', 'fail', 'refund'))) {
+if (!in_array($action, array('check', 'pay', 'fail', 'refund', 'confirm', 'cancel'))) {
     exit_with_error(CLOUDPAYMENTS_RESULT_ERROR_NOT_ACCEPTED);
 }
 if (empty($_POST['InvoiceId']) || empty($_POST['Amount'])) {
@@ -43,7 +43,7 @@ if ($check_sign !== $request_sign) {
 };
 
 // Запросы связанные с оплатой
-$is_payment_callback = in_array($action, array('check', 'pay'));
+$is_payment_callback = in_array($action, array('check', 'pay', 'confirm'));
 
 // Нельзя оплатить уже оплаченный заказ
 if ($is_payment_callback && $order->paid) {
@@ -68,7 +68,7 @@ if ($is_payment_callback) {
     }
 }
 
-if ($action == 'pay' && $_POST['Status'] == 'Completed') {
+if (($action == 'pay' && $_POST['Status'] == 'Completed') || $action == 'confirm') {
     // Установим статус оплачен
     $simpla->orders->update_order(intval($order->id), array('paid' => 1));
 
@@ -78,12 +78,15 @@ if ($action == 'pay' && $_POST['Status'] == 'Completed') {
 
     // Спишем товары
     $simpla->orders->close(intval($order->id));
-} else if ($action == 'refund') {
+} else if ($action == 'refund' || $action == 'cancel') {
     $note = $order->note;
     if (!empty($note)) {
         $note .= "\n";
     }
-    $note .= 'Совершён полный возрат денежных средств.';
+    if ($action == 'refund') {
+    $note .= 'Совершён полный возврат денежных средств.';
+    }
+    else $note .= 'Платеж отменен.';
     // Установим статус не оплачен и запишем заметку
     $simpla->orders->update_order(intval($order->id), array('paid' => 0, 'note' => $note));
 

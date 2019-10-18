@@ -16,9 +16,10 @@ class CloudPayments extends Simpla {
 
         $order_description = 'Оплата заказа №' . $order->id;
 
-        $amount      = floatval($this->money->convert($order->total_price, $payment_method->currency_id, false));
-        $success_url = $this->config->root_url . '/order/' . $order->url;
-        $fail_url    = $this->config->root_url . '/order/' . $order->url;
+        $amount         = floatval($this->money->convert($order->total_price, $payment_method->currency_id, false));
+	$payment_scheme = $payment_settings['payment_scheme'];
+        $success_url    = $this->config->root_url . '/order/' . $order->url;
+        $fail_url       = $this->config->root_url . '/order/' . $order->url;
 
         $params = array(
             'publicId'    => $payment_settings['public_id'],  //id из личного кабинета
@@ -27,6 +28,7 @@ class CloudPayments extends Simpla {
             'currency'    => $payment_currency->code, //валюта
             'invoiceId'   => $order->id, //номер заказа  (необязательно)
             'accountId'   => $order->email, //идентификатор плательщика (необязательно)
+            'skin'    => $payment_settings['skin'],
             'data'        => array(
                 'name'          => $order->name,
                 'phone'         => $order->phone,
@@ -40,7 +42,7 @@ class CloudPayments extends Simpla {
         $lang   = $payment_settings['language'];
         $params = json_encode($params);
 
-        $button = "<script src=\"https://widget.cloudpayments.ru/bundles/cloudpayments\"></script>" . PHP_EOL;
+        $button = "<script src=\"https://widget.cloudpayments.ru/bundles/cloudpayments?cms=Simpla\"></script>" . PHP_EOL;
         $button .= "<form id='simpla_cloudpayments_form' method='post'>";
         $button .= "<input type='submit' value='" . $button_text . "'>";
         $button .= "</form>" . PHP_EOL;
@@ -62,7 +64,7 @@ class CloudPayments extends Simpla {
                     evt.cancelBubble = true;  
                 }
                 var widget = new cp.CloudPayments({language: '{$lang}'});
-                widget.charge({$params}, '{$success_url}', '{$fail_url}');
+                widget.{$payment_scheme}({$params}, '{$success_url}', '{$fail_url}');
             });
         </script>
 SCRIPT;
@@ -74,11 +76,13 @@ SCRIPT;
         $tax_system   = $payment_settings['taxation_system'];
         $receipt_data = array(
             'Items'          => array(),
+            'amounts'        => array(),
             'taxationSystem' => $tax_system,
+	        'calculationPlace'=>'www.'.$_SERVER['SERVER_NAME'],
             'email'          => $order->email,
             'phone'          => $order->phone
         );
-
+        $electronic = 0;
         $purchases = $this->orders->get_purchases(array('order_id' => intval($order->id)));
         $vat       = $payment_settings['vat'];
         if ($vat == 'none') {
@@ -94,6 +98,7 @@ SCRIPT;
                 'amount'   => floatval($price * $purchase->amount),
                 'vat'      => $vat
             );
+            $electronic = $electronic+floatval($price * $purchase->amount);
         }
         if ($order->delivery_price && !$order->separate_delivery) {
             $delivery_method = $this->delivery->get_delivery($order->delivery_id);
@@ -110,7 +115,9 @@ SCRIPT;
                 'amount'   => floatval($price),
                 'vat'      => $vat_delivery
             );
+            $electronic = $electronic+floatval($price);
         }
+        $receipt_data['amounts']['electronic'] = $electronic;
 
         return $receipt_data;
     }

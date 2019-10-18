@@ -10,6 +10,34 @@
         <name>Секретный ключ</name>
     </settings>
     <settings>
+        <variable>payment_scheme</variable>
+        <name>Схема платежа</name>
+        <options>
+            <name>Одностадийная</name>
+            <value>charge</value>
+        </options>
+        <options>
+            <name>Двухстадийная</name>
+            <value>auth</value>
+        </options>
+    </settings>
+    <settings>
+        <variable>skin</variable>
+        <name>Дизайн виджета</name>
+        <options>
+            <name>Classic</name>
+            <value>classic</value>
+        </options>
+        <options>
+            <name>Modern</name>
+            <value>modern</value>
+        </options>
+        <options>
+            <name>Mini</name>
+            <value>mini</value>
+        </options>
+    </settings>
+    <settings>
         <variable>language</variable>
         <name>Язык виджета</name>
         <options>
@@ -101,8 +129,8 @@
             <value>0</value>
         </options>
         <options>
-            <name>НДС 18%</name>
-            <value>18</value>
+            <name>НДС 20%</name>
+            <value>20</value>
         </options>
         <options>
             <name>НДС 10%</name>
@@ -113,8 +141,8 @@
             <value>110</value>
         </options>
         <options>
-            <name>Расчетный НДС 18/118</name>
-            <value>118</value>
+            <name>Расчетный НДС 20/120</name>
+            <value>120</value>
         </options>
     </settings>
     <settings>
@@ -129,8 +157,8 @@
             <value>0</value>
         </options>
         <options>
-            <name>НДС 18%</name>
-            <value>18</value>
+            <name>НДС 20%</name>
+            <value>20</value>
         </options>
         <options>
             <name>НДС 10%</name>
@@ -141,8 +169,8 @@
             <value>110</value>
         </options>
         <options>
-            <name>Расчетный НДС 18/118</name>
-            <value>118</value>
+            <name>Расчетный НДС 20/120</name>
+            <value>120</value>
         </options>
     </settings>
 </module>
